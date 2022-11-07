@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Nav from 'react-bootstrap/Nav';
+import {Context1} from './../App.js'
 
 function Detail(props) {
 
@@ -9,10 +10,8 @@ function Detail(props) {
     useEffect(()=>{
         let a = setTimeout(()=>{
             setDisplay(false);
-            setFade("end");
         }, 2000);
         return () => {
-            setFade("");
             clearTimeout(a);
         }
     }, []);
@@ -20,10 +19,9 @@ function Detail(props) {
     const {id} = useParams();
     let object = props.shoes.find((x) => x.id == id)
     const [tab, setTab] = useState(0);
-    const [fade, setFade] = useState("end");
 
     return (
-        <div className={`container start ${fade}`}>
+        <div className={`container`}>
             {display ? 
             <div className="alert alert-warning">
                 2초이내 구매시 할인
@@ -52,12 +50,15 @@ function Detail(props) {
                     <Nav.Link eventKey="link2" onClick={()=>setTab(2)}>버튼2</Nav.Link>
                 </Nav.Item>
             </Nav>
-            <TabContent tab={tab}/>
+            <TabContent shoes={props.shoes} tab={tab}/>
         </div>
     ); 
 }
 
-function TabContent({tab}) {
+function TabContent({tab, shoes}) {
+
+    let {재고} = useContext(Context1);
+    console.log(재고);
 
     const [fade, setFade] = useState('');
     useEffect(()=>{
@@ -69,7 +70,7 @@ function TabContent({tab}) {
     }, [tab]);
 
     return (<div className={`start ${fade}`}>
-        { [<div>내용0</div>, <div>내용1</div>,<div>내용2</div>][tab] }
+        { [<div>{shoes[0].title}</div>, <div>내용1</div>,<div>내용2</div>][tab] }
     </div>);
 }   
 
