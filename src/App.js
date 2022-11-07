@@ -4,11 +4,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import data from './data';
 import Detail from './pages/Detail';
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import { Routes, Route, useNavigate, Outlet } from 'react-router-dom';
+import axios from "axios";
 
 function App() {
 
-  const [shoes] = useState(data);
+  const [shoes, setShoes] = useState(data);
   const navigate = useNavigate();
 
   return (
@@ -29,20 +30,20 @@ function App() {
             <div className="main-bg"></div>
             <div className='container'>
               <div className="row">
-                { shoes.map(data => <Card data={data} key={data.id}/>) }
+                { shoes.map(shoe => <Card shoe={shoe} key={shoe.id}/>) }
               </div>
             </div>
+            <button onClick={()=>{
+              axios.get('https://codingapple1.github.io/shop/data2.json')
+              .then((result)=>{
+                setShoes([...shoes, ...result.data]);
+               }).catch(()=>{
+                console.log("실페함 ㅅㄱ");
+               })
+            }}>더보기</button>
           </>
         }/>
-        <Route path="/detail" element={<Detail/>}/>
-        <Route path="/about" element={<About/>}>
-          <Route path="member" element={<div>멤버임</div>}/>
-          <Route path="location" element={<div>위치정보임</div>}/>
-        </Route>
-        <Route path="/event" element={<Event/>}>
-          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}/>
-          <Route path="two" element={<div>생일기념 쿠폰받기</div>}/>
-        </Route>
+        <Route path="/detail/:id" element={<Detail shoes={shoes}/>}/>
         <Route path="*" element={<div>없는 페이지 입니다.</div>}/>
       </Routes>
     </div>
@@ -70,11 +71,12 @@ const About = () => {
 const Card = (props) => {
   return (
     <div className="col-md-4">
-      <img src={"https://codingapple1.github.io/shop/shoes"+(props.data.id+1)+".jpg"} width="80%"/>
-      <h4>{props.data.title}</h4>
-      <p>{props.data.content}</p>
+      <img src={"https://codingapple1.github.io/shop/shoes"+(props.shoe.id*1+1)+".jpg"} width="80%"/>
+      <h4>{props.shoe.title}</h4>
+      <p>{props.shoe.content}</p>
     </div>
   );
 };
+
 
 export default App;
