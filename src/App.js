@@ -23,7 +23,7 @@ function App() {
           <Navbar.Brand href="#home">쇼핑몰</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link onClick={()=>navigate('/')}>Home</Nav.Link>
-            <Nav.Link onClick={()=>navigate('/detail')}>Cart</Nav.Link>
+            <Nav.Link onClick={()=>navigate('/cart')}>Cart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -78,8 +78,11 @@ const About = () => {
 }
 
 const Card = (props) => {
+
+  const navigate = useNavigate();
+
   return (
-    <div className="col-md-4">
+    <div className="col-md-4" onClick={()=>navigate(`/detail/${props.shoe.id}`)}>
       <img src={"https://codingapple1.github.io/shop/shoes"+(props.shoe.id*1+1)+".jpg"} width="80%"/>
       <h4>{props.shoe.title}</h4>
       <p>{props.shoe.content}</p>
