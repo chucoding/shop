@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Nav from 'react-bootstrap/Nav';
 import {Context1} from '../App.js';
-import { addList } from '../store/cartSlice.js';
+import { addItem } from '../store/cartSlice.js';
 import { useDispatch } from "react-redux";
 
 function Detail(props) {
@@ -41,7 +41,7 @@ function Detail(props) {
                     <p>{object.content}</p>
                     <p>{object.price}원</p>
                     <button className="btn btn-danger" onClick={()=>{
-                        dispatch(addList(object));
+                        dispatch(addItem(object));
                         navigate('/cart');
                     }}>주문하기</button>
                 </div>

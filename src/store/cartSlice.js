@@ -11,14 +11,21 @@ const cart = createSlice({
             const item = state.find(item => item.id == action.payload);
             item.count += 1;
         },
-        addList(state, action) {
-            const item = {...action.payload};
-            item.name = item.title;
-            item.count = 1;
-            state.push(item);
+        addItem(state, action) {
+            const item = state.find(item => item.id === action.payload.id) || {...action.payload};
+            if(state.includes(item)) {
+                item.count += 1;
+            } else {
+                item.name = item.title;
+                item.count = 1;
+                state.push(item); 
+            }
+        },
+        removeItem(state, action) {
+            state.splice(state.findIndex(item => item.id == action.payload),1);
         }
     }
 })
 
-export const { changeCount, addList } = cart.actions;
+export const { changeCount, addItem, removeItem } = cart.actions;
 export default cart;
