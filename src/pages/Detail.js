@@ -11,8 +11,18 @@ function Detail(props) {
     const dispatch = useDispatch();
 
     const [display, setDisplay] = useState(true);
+    const {id} = useParams();
+    let object = props.shoes.find((x) => x.id == id)
+    const [tab, setTab] = useState(0);
 
     useEffect(()=>{
+
+        let watchedList = JSON.parse(localStorage.getItem('watched')) || [];
+        if(!watchedList.includes(object.id)) {
+            watchedList.push(object.id);
+            localStorage.setItem('watched', JSON.stringify(watchedList));
+        }
+          
         let a = setTimeout(()=>{
             setDisplay(false);
         }, 2000);
@@ -20,10 +30,6 @@ function Detail(props) {
             clearTimeout(a);
         }
     }, []);
-
-    const {id} = useParams();
-    let object = props.shoes.find((x) => x.id == id)
-    const [tab, setTab] = useState(0);
 
     return (
         <div className={`container`}>

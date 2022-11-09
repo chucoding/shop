@@ -1,4 +1,4 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -7,6 +7,7 @@ import Detail from './pages/Detail';
 import Cart from './pages/Cart';
 import { Routes, Route, useNavigate, Outlet } from 'react-router-dom';
 import axios from "axios";
+import { useQuery } from "react-query";
 
 export let Context1 = createContext();
 
@@ -16,6 +17,13 @@ function App() {
   const [재고] = useState([10, 11, 12]);
   const navigate = useNavigate();
 
+  let result = useQuery('a', ()=>
+    axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      console.log(1);
+      return a.data
+    })
+  )
+
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
@@ -24,6 +32,11 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link onClick={()=>navigate('/')}>Home</Nav.Link>
             <Nav.Link onClick={()=>navigate('/cart')}>Cart</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto" style={{color:"white"}}>
+            { result.isLoading && '로딩중' }
+            { result.error && '에러남' }
+            { result.data && result.data.name }
           </Nav>
         </Container>
       </Navbar>
